@@ -1,3 +1,5 @@
+require('./db/config');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
@@ -6,6 +8,8 @@ const _ = require('lodash');
 const { mongoose } = require('./db/mongoose');
 const { User } = require('./models/user');
 const { Todo } = require('./models/todo');
+
+const PORT = process.env.PORT;
 
 const app = express();
 
@@ -77,8 +81,8 @@ app.patch('/todos/:id', (req, res) => {
     }, err => res.status(404).send());
 });
 
-app.listen(3000, () => {
-    console.log("server started on port 3000");
+app.listen(PORT, () => {
+    console.log("server started on port " + PORT);
 });
 
 module.exports = { app };
