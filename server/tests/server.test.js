@@ -1,24 +1,14 @@
 const expect = require('expect');
 const request = require('supertest');
+const { ObjectID } = require('mongodb');
 
 const { app } = require('../server');
 const { Todo } = require('../models/todo');
-const { ObjectID } = require('mongodb');
+const { User } = require('../models/user');
+const { testTodos, testUsers, populateTodos, populateUsers } = require('./seeds/seed');
 
-const testTodos = [{
-    _id: new ObjectID,
-    text: 'test1'
-}, {
-    _id: new ObjectID,
-    text: 'test2'
-}];
-
-beforeEach(done => {
-    Todo.deleteMany({}).then(() => {
-        Todo.insertMany(testTodos);
-        done();
-    });
-});
+beforeEach(populateTodos);
+beforeEach(populateUsers);
 
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
@@ -118,6 +108,24 @@ describe('DELETE todos/:id', () => {
         request(app)
             .get('/todos/' + 'asdf23')
             .expect(404)
+            .end(done);
+    });
+});
+
+describe('GET users/me', () => {
+    it('should return user if authenticated', (done) => {
+        request(app)
+            .get('/users/me')
+            .set('x-auth', testUsers[0].tokens[0].token)
+            .expect(200)
+            .expect(res => expect(res.body.user.email).toBe(testUsers[0].email))
+            .end(done);
+    });
+
+    it('should send 401 error if not authenticated', (done) => {
+        request(app)
+            .get('/users/me')
+            .expect(401)
             .end(done);
     });
 });
