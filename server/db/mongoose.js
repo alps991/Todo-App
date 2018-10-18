@@ -10,6 +10,8 @@ if (env === 'development') {
     mongo_uri = process.env.MONGODB_URI_DEV;
 } else if (env === 'test') {
     mongo_uri = process.env.MONGODB_URI_TEST;
+} else {
+    mongo_uri = process.env.MONGODB_URI;
 }
 
 
