@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
+const path = require('path');
 
 const { mongoose } = require('./db/mongoose');
 const { User } = require('./models/user');
@@ -11,8 +12,15 @@ const { Todo } = require('./models/todo');
 const { authenticate } = require('./middleware/authenticate');
 
 const PORT = process.env.PORT || 3000;
+const publicPath = path.join(__dirname, '../client/public');
 
 const app = express();
+
+app.use(express.static(publicPath));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 app.use(bodyParser.json());
 
