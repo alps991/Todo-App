@@ -118,7 +118,10 @@ describe('GET users/me', () => {
             .get('/users/me')
             .set('x-auth', testUsers[0].tokens[0].token)
             .expect(200)
-            .expect(res => expect(res.body.user.email).toBe(testUsers[0].email))
+            .expect(res => {
+                expect(res.body._id).toBe(testUsers[0]._id.toHexString());
+                expect(res.body.email).toBe(testUsers[0].email);
+            })
             .end(done);
     });
 
@@ -126,6 +129,47 @@ describe('GET users/me', () => {
         request(app)
             .get('/users/me')
             .expect(401)
+            .expect(res => expect(res.body).toEqual({}))
             .end(done);
+    });
+});
+
+describe('POST users', () => {
+    it('should create a new user', (done) => {
+        request(app)
+            .post('/users')
+            .send({ email: 'example@example.com', password: 'password2' })
+            .expect(200)
+            .expect((res) => {
+                expect(res.headers['x-auth']).toBeTruthy();
+                expect(res.body.email).toBe('example@example.com');
+                expect(res.body._id).toBeTruthy();
+            })
+            .end(err => {
+                if (err) {
+                    return done(err);
+                }
+                User.findOne({ email: 'example@example.com' }).then((user) => {
+                    expect(user).toBeTruthy();
+                    done();
+                }).catch(err => done(err));
+            });
+    });
+
+    it('should not create a new user if input is invalid', (done) => {
+        request(app)
+            .post('/users')
+            .send({ email: 'alps99@hotmail.com' })
+            .expect(400)
+            .end(done);
+    });
+
+    it('should not create a new user if email is taken', (done) => {
+        request(app)
+            .post('/users')
+            .send({ email: 'alps99@hotmail.com', password: 'password2' })
+            .expect(400)
+            .end(done);
+
     });
 });
