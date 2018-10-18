@@ -1,4 +1,4 @@
-require('./db/config');
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const { User } = require('./models/user');
 const { Todo } = require('./models/todo');
 const { authenticate } = require('./middleware/authenticate');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 

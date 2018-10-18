@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -45,7 +46,7 @@ UserSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({
         _id: user._id.toHexString(),
         access
-    }, 'secret').toString();
+    }, process.env.JWT_SECRET).toString();
     user.tokens = user.tokens.concat([{ access, token }]);
     return user.save().then(() => token);
 };
@@ -54,7 +55,7 @@ UserSchema.statics.findByToken = function (token) {
     const User = this;
     let decoded;
     try {
-        decoded = jwt.verify(token, 'secret');
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (e) {
         return Promise.reject();
     }
