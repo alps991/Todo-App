@@ -7,7 +7,7 @@ class DashboardPage extends React.Component {
     e.preventDefault();
     axios({
       method: 'post',
-      url: 'https://localhost:3000/users',
+      url: 'https://todos-alps.herokuapp.com/users',
       data: {
         email: 'Fred',
         password: 'Flintstone'
