@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
 const _ = require('lodash');
 const path = require('path');
+const cors = require('cors');
 
 const { mongoose } = require('./db/mongoose');
 const { User } = require('./models/user');
@@ -16,13 +17,13 @@ const publicPath = path.join(__dirname, '../client/public');
 
 const app = express();
 
+app.use(cors());
+app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
 });
-
-app.use(bodyParser.json());
 
 app.post('/users', (req, res) => {
     const body = _.pick(req.body, ['email', 'password']);

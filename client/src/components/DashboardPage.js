@@ -7,10 +7,10 @@ class DashboardPage extends React.Component {
     e.preventDefault();
     axios({
       method: 'post',
-      url: 'https://todos-alps.herokuapp.com/users',
+      url: 'https://localhost:3000/users',
       data: {
         email: 'Fred',
-        passwrod: 'Flintstone'
+        password: 'Flintstone'
       }
     });
   }
