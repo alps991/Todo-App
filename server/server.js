@@ -46,11 +46,12 @@ app.post('/users/login', (req, res) => {
         return user.generateAuthToken().then((token) => {
             res.header('x-auth', token).send(user);
         });
-    }).catch(err => res.status(404).send());
+    }).catch(err => {
+        res.status(404).send(err);
+    });
 });
 
 app.delete('/users/me/token', authenticate, (req, res) => {
-    console.log(req.user);
     req.user.removeToken(req.token).then(() => {
         res.status(200).send();
     }).then(err => {
