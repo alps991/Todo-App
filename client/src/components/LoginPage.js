@@ -35,9 +35,9 @@ class LoginPage extends React.Component {
                 password: this.state.password
             }
         }).then((res) => {
-            this.setState({ email: '', password: '' });
-            this.props.login();
             console.log(res);
+            this.setState({ email: '', password: '' });
+            this.props.login(res.headers['x-auth']);
         }).catch((err) => {
             console.log(err);
         });

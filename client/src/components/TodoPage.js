@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import AddTodo from './AddTodo';
+import { connect } from 'react-redux';
 
 class TodoPage extends React.Component {
 
@@ -9,13 +10,19 @@ class TodoPage extends React.Component {
     }
 
     componentWillMount() {
+        console.log(this.props.token);
         axios({
             method: 'get',
-            url: 'https://todos-alps.herokuapp.com/todos/'
+            url: 'https://todos-alps.herokuapp.com/todos/',
+            headers: {
+                'x-auth': this.props.token
+            }
         }).then((res) => {
             this.setState({ todos: res });
+            console.log('This is the res:')
             console.log(res);
         }).catch((err) => {
+            console.log('This is the error:')
             console.log(err);
         });
 
@@ -39,4 +46,8 @@ class TodoPage extends React.Component {
     }
 }
 
-export default TodoPage;
+const mapStateToProps = (state) => ({
+    token: state.auth.token
+});
+
+export default connect(mapStateToProps)(TodoPage);

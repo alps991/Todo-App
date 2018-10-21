@@ -14,7 +14,7 @@ const Header = (props) => (
         {props.loggedIn ? <button className="button button--link" onClick={() => {
           axios({
             method: 'delete',
-            url: 'http://todos-alps/herokuapp.com/users/me/token'
+            url: 'https://todos-alps/herokuapp.com/users/me/token'
           }).then((res) => {
             props.login();
             console.log(res);
