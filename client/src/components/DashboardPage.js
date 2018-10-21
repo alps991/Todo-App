@@ -11,7 +11,7 @@ class DashboardPage extends React.Component {
     if (!this.props.loggedIn) {
       currPage = <LoginPage />;
     } else {
-      currPage = <LoginPage />;
+      currPage = <TodoPage />;
     }
 
     return (
