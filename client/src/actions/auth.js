@@ -1,4 +1,8 @@
-export const login = (uid) => ({
+export const login = (token) => ({
   type: 'LOGIN',
-  uid
+  token
+});
+
+export const logout = () => ({
+  type: 'LOGOUT'
 });

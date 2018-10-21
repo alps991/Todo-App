@@ -17,7 +17,12 @@ const publicPath = path.join(__dirname, '../client/public');
 
 const app = express();
 
-app.use(cors());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
@@ -26,7 +31,8 @@ app.get('/', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-    const body = _.pick(req.body, ['email', 'password']);
+    let body = _.pick(req.body, ['email', 'password']);
+    body.email = body.email.toLowerCase();
     const user = new User(body);
     user.save().then(() => {
         return user.generateAuthToken();

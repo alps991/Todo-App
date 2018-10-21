@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { login } from '../actions/auth';
 
 class LoginPage extends React.Component {
 
@@ -34,9 +36,10 @@ class LoginPage extends React.Component {
             }
         }).then((res) => {
             this.setState({ email: '', password: '' });
+            this.props.login();
             console.log(res);
         }).catch((err) => {
-            console.log(err.response.status);
+            console.log(err);
         });
     }
 
@@ -56,4 +59,8 @@ class LoginPage extends React.Component {
     }
 }
 
-export default LoginPage;
+const mapDispatchToProps = (dispatch) => ({
+    login: () => dispatch(login())
+});
+
+export default connect(undefined, mapDispatchToProps)(LoginPage);
