@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import { login } from '../actions/auth';
+import { startLogin } from '../actions/auth';
 
 class LoginPage extends React.Component {
 
@@ -21,26 +20,11 @@ class LoginPage extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let url;
         if (this.state.status == "login") {
-            url = 'https://todos-alps.herokuapp.com/users/login';
+            this.props.startLogin(this.state.email, this.state.password);
         } else if (this.state.status == "register") {
             url = 'https://todos-alps.herokuapp.com/users/';
         }
-        axios({
-            method: 'post',
-            url,
-            data: {
-                email: this.state.email,
-                password: this.state.password
-            }
-        }).then((res) => {
-            console.log(res);
-            this.setState({ email: '', password: '' });
-            this.props.login(res.headers['x-auth']);
-        }).catch((err) => {
-            console.log(err);
-        });
     }
 
     render() {
@@ -60,7 +44,7 @@ class LoginPage extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    login: () => dispatch(login())
+    startLogin: (email, password) => dispatch(startLogin(email, password))
 });
 
 export default connect(undefined, mapDispatchToProps)(LoginPage);
