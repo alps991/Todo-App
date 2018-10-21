@@ -38,6 +38,7 @@ class LoginPage extends React.Component {
                     Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
                     <button onClick={this.handleSubmit}>Submit</button>
                 </form>
+                <button onClick={() => this.setState({ email: 'example@example.com', password: 'Aaolaaol1' })}>Example</button>
             </div>
         );
     }

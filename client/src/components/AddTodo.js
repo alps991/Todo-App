@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { startAddTodo } from '../actions/todos';
 
 class AddTodo extends React.Component {
 
@@ -13,31 +14,29 @@ class AddTodo extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        axios({
-            method: 'post',
-            url: 'https://todos-alps.herokuapp.com/todos/',
-            data: {
-                text: this.state.text
-            }
-        }).then((res) => {
-            this.setState({ text: '' });
-            console.log('new todo was posted');
-            console.log(res);
-        }).catch((err) => {
-            console.log(err);
-        });
+        console.log('props token:' + this.props.token)
+        this.props.startAddTodo(this.state.text, this.props.token);
     }
 
     render() {
         return (
             <div>
                 <h3>Add a new Todo</h3>
-                <form className="form" onSubmit={this.handleSubmit}>
+                <form className="form">
                     Text: <input type="text" value={this.state.text} onChange={this.handleChange} />
+                    <button className="button" onClick={this.handleSubmit} >Submit</button>
                 </form>
             </div>
         )
     }
 }
 
-export default AddTodo;
+const mapStateToProps = (state) => ({
+    token: state.auth.token
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    startAddTodo: (text, token) => dispatch(startAddTodo(text, token))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTodo);

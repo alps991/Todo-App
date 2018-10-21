@@ -1,53 +1,47 @@
 import React from 'react';
-import axios from 'axios';
 import AddTodo from './AddTodo';
 import { connect } from 'react-redux';
+import { startGetTodos } from '../actions/todos';
 
 class TodoPage extends React.Component {
 
-    state = {
-        todos: undefined
-    }
-
-    componentWillMount() {
-        console.log(this.props.token);
-        axios({
-            method: 'get',
-            url: 'https://todos-alps.herokuapp.com/todos/',
-            headers: {
-                'x-auth': this.props.token
-            }
-        }).then((res) => {
-            this.setState({ todos: res });
-            console.log('This is the res:')
-            console.log(res);
-        }).catch((err) => {
-            console.log('This is the error:')
-            console.log(err);
-        });
-
+    constructor(props) {
+        super(props);
+        this.props.startGetTodos(this.props.token);
     }
 
     render() {
+        if (!this.props.todos[0]) {
+            return (
+                <div>
+                    <h2>Todos are not yet recieved</h2>
+                </div>
+            );
+        }
         return (
             <div>
                 <AddTodo />
-                {this.state.todos.map((todo) => {
+                {this.props.todos.map((todo, i) => {
                     return (
-                        <div>
-                            <h3>todo.text</h3>
-                            <p>todo.completed</p>
-                            <p>todo.createdAt</p>
+                        <div key={i}>
+                            <h3>{todo.text}</h3>
+                            <p>{todo.completed ? 'Complete' : 'Incomplete'}</p>
+                            <p>{todo.createdAt}</p>
                         </div>
                     );
                 })}
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => ({
-    token: state.auth.token
+    token: state.auth.token,
+    todos: state.todos
 });
 
-export default connect(mapStateToProps)(TodoPage);
+const mapDispatchToProps = (dispatch) => ({
+    startGetTodos: (token) => dispatch(startGetTodos(token))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoPage);

@@ -15,7 +15,7 @@ export const startLogin = (email, password) => {
         password
       }
     }).then((res) => {
-      dispatch(login(res.headers['x-auth']));
+      dispatch(login(res.data['x-auth']));
       console.log('this is the res');
       console.log(res);
     }).catch((err) => {
