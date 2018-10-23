@@ -1,8 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { logout } from '../actions/auth';
+import { startLogout } from '../actions/auth';
 
 const Header = (props) => (
   <header className="header">
@@ -11,28 +10,19 @@ const Header = (props) => (
         <Link className="header__title" to="/">
           <h1>To-do App</h1>
         </Link>
-        {props.loggedIn ? <button className="button button--link" onClick={() => {
-          axios({
-            method: 'delete',
-            url: 'https://todos-alps/herokuapp.com/users/me/token'
-          }).then((res) => {
-            props.login();
-            console.log(res);
-          }).catch((err) => {
-            console.log(err);
-          });
-        }}>Logout</button> : undefined}
+        {props.loggedIn ? <button className="button button--link" onClick={() => props.startLogout(props.token)}>Logout</button> : undefined}
       </div>
     </div>
   </header>
 );
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.auth.loggedIn
+  loggedIn: state.auth.loggedIn,
+  token: state.auth.token
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  logout: () => dispatch(logout())
+  startLogout: (token) => dispatch(startLogout(token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

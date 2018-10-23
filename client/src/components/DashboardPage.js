@@ -1,30 +1,42 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import LoginPage from './LoginPage';
-import TodoPage from './TodoPage';
+import { Link } from 'react-router-dom';
+import { startGetTodos } from '../actions/todos';
+import TodoList from './TodoList';
 
 class DashboardPage extends React.Component {
 
-  render() {
-    let currPage;
-    if (!this.props.loggedIn) {
-      currPage = <LoginPage />;
-    } else {
-      currPage = <TodoPage />;
-    }
+  constructor(props) {
+    super(props);
+    this.props.startGetTodos(this.props.token);
+  }
 
+  render() {
+    if (!this.props.todos[0]) {
+      return (
+        <div>
+          <h2>You have no To-dos</h2>
+        </div>
+      );
+    }
     return (
-      <div className="dashboard-page">
-        <h1>This is the todo app dashboard</h1>
-        {currPage}
+      <div className="content-container">
+        <Link to="/addTodo" >
+          <button className="button">Add Item</button>
+        </Link>
+        <TodoList todos={this.props.todos} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.auth.loggedIn
+  token: state.auth.token,
+  todos: state.todos
 });
 
-export default connect(mapStateToProps)(DashboardPage);
+const mapDispatchToProps = (dispatch) => ({
+  startGetTodos: (token) => dispatch(startGetTodos(token))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

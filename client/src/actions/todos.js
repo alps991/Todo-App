@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 export const startGetTodos = (token) => {
-    console.log(token);
     return (dispatch) => {
-        console.log(token);
         return axios({
             method: 'get',
             url: 'https://todos-alps.herokuapp.com/todos/',
@@ -27,7 +25,6 @@ export const getTodos = (todos) => ({
 });
 
 export const startAddTodo = (text, token) => {
-    console.log(token);
     return (dispatch) => {
         return axios({
             method: 'post',
@@ -39,7 +36,7 @@ export const startAddTodo = (text, token) => {
                 'x-auth': token
             }
         }).then((res) => {
-            dispatch(addTodo(text));
+            dispatch(addTodo(res.data));
             console.log('new todo was posted');
             console.log(res);
         }).catch((err) => {
@@ -49,7 +46,7 @@ export const startAddTodo = (text, token) => {
     }
 }
 
-export const addTodo = (text) => ({
+export const addTodo = (todo) => ({
     type: 'ADD_TODO',
-    text
+    todo
 });
