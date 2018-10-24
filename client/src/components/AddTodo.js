@@ -23,7 +23,12 @@ class AddTodo extends React.Component {
             <div className="content-container">
                 <h3>Add a new Todo</h3>
                 <form className="form">
-                    Text: <input type="text" value={this.state.text} onChange={this.handleChange} />
+                    <input
+                        className="text-input"
+                        placeholder="Enter new to-do text"
+                        type="text" value={this.state.text}
+                        onChange={this.handleChange}
+                    />
                     <button className="button" onClick={this.handleSubmit}>Submit</button>
                 </form>
             </div>

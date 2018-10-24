@@ -7,6 +7,15 @@ export default (state = {}, action) => {
                 ...state,
                 action.todo
             ];
+        case 'UPDATE_TODO':
+            return state.map((todo) => {
+                if (todo._id == action.todo._id) {
+                    return action.todo;
+                }
+                return todo;
+            });
+        case 'DELETE_TODO':
+            return state.filter((todo) => todo._id != action.id)
         default:
             return state;
     }

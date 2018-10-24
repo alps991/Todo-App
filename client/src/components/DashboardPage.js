@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { startGetTodos } from '../actions/todos';
 import TodoList from './TodoList';
+import TodoSummary from './TodoSummary';
 
 class DashboardPage extends React.Component {
 
@@ -14,16 +14,14 @@ class DashboardPage extends React.Component {
   render() {
     if (!this.props.todos[0]) {
       return (
-        <div>
+        <div className="content-container">
           <h2>You have no To-dos</h2>
         </div>
       );
     }
     return (
-      <div className="content-container">
-        <Link to="/addTodo" >
-          <button className="button">Add Item</button>
-        </Link>
+      <div>
+        <TodoSummary />
         <TodoList todos={this.props.todos} />
       </div>
     );

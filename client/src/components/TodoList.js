@@ -2,7 +2,7 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 const TodoList = (props) => (
-    <div>
+    <div className="content-container">
         <div className="list-header">
             <div>Todo Item</div>
             <div>Status</div>

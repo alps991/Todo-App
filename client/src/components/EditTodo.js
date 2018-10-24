@@ -1,12 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { startAddTodo } from '../actions/todos';
+import { startUpdateTodo, startDeleteTodo } from '../actions/todos';
 
 class EditTodo extends React.Component {
 
-    state = {
-        text: '',
-        completed: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: props.selectedTodo.text ? props.selectedTodo.text : '',
+            status: props.selectedTodo.status ? props.selectedTodo.status : "incomplete"
+        };
     }
 
     handleTextChange = (e) => {
@@ -14,12 +17,17 @@ class EditTodo extends React.Component {
     }
 
     handleStatusChange = (e) => {
-        this.setState({ compelted: e.target.value });
+        this.setState({ status: e.target.value });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.startAddTodo(this.state.text, this.props.token);
+        this.props.startUpdateTodo(this.state.text, this.state.status, this.props.selectedTodo._id, this.props.token);
+        this.props.history.push('/');
+    }
+
+    handleDelete = () => {
+        this.props.startDeleteTodo(this.props.selectedTodo._id, this.props.token)
         this.props.history.push('/');
     }
 
@@ -28,25 +36,45 @@ class EditTodo extends React.Component {
             <div className="content-container">
                 <h3>Edit Todo</h3>
                 <form className="form">
-                    Text: <input type="text" value={this.state.text} onChange={this.handleTextChange} />
-                    <div onChange={this.handleStatusChange}>
-                        Status:
-                        <input type="radio" value="Incomplete" name="status" /> Incomplete
-                        <input type="radio" value="Completed" name="status" /> Completed
+                    <input className="text-input" type="text" value={this.state.text} onChange={this.handleTextChange} />
+                    <div className="radio-group" onChange={this.handleStatusChange}>
+                        <div className="radio-button">
+                            <input
+                                type="radio"
+                                value="incomplete"
+                                id="incomplete"
+                                name="status"
+                                defaultChecked={this.state.status == "incomplete" ? "checked" : undefined}
+                            />
+                            <label htmlFor="incomplete">Incomplete</label>
+                        </div>
+                        <div className="radio-button">
+                            <input
+                                type="radio"
+                                value="complete"
+                                id="complete"
+                                name="status"
+                                defaultChecked={this.state.status == "complete" ? "checked" : undefined}
+                            />
+                            <label htmlFor="complete">Complete</label>
+                        </div>
                     </div>
                     <button className="button" onClick={this.handleSubmit}>Submit</button>
                 </form>
+                <button className="button button--secondary" onClick={this.handleDelete}>Delete Todo</button>
             </div>
         )
     }
 }
 
-const mapStateToProps = (state) => ({
-    token: state.auth.token
+const mapStateToProps = (state, props) => ({
+    token: state.auth.token,
+    selectedTodo: state.todos.filter((todo) => todo._id == props.match.params.id)[0]
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startAddTodo: (text, token) => dispatch(startAddTodo(text, token))
+    startUpdateTodo: (text, token) => dispatch(startUpdateTodo(text, token)),
+    startDeleteTodo: (id, token) => dispatch(startDeleteTodo(id, token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTodo);

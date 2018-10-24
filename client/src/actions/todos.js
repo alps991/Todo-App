@@ -50,3 +50,55 @@ export const addTodo = (todo) => ({
     type: 'ADD_TODO',
     todo
 });
+
+export const startUpdateTodo = (text, completed, id, token) => {
+    return (dispatch) => {
+        return axios({
+            method: 'patch',
+            url: 'https://todos-alps.herokuapp.com/todos/' + id,
+            data: {
+                text,
+                completed
+            },
+            headers: {
+                'x-auth': token
+            }
+        }).then((res) => {
+            dispatch(updateTodo(res.data));
+            console.log('new todo was posted');
+            console.log(res);
+        }).catch((err) => {
+            console.log('server contact failed');
+            console.log(err);
+        });
+    }
+}
+
+export const updateTodo = (todo) => ({
+    type: 'UPDATE_TODO',
+    todo
+});
+
+export const startDeleteTodo = (id, token) => {
+    return (dispatch) => {
+        return axios({
+            method: 'delete',
+            url: 'https://todos-alps.herokuapp.com/todos/' + id,
+            headers: {
+                'x-auth': token
+            }
+        }).then((res) => {
+            dispatch(deleteTodo(id));
+            console.log('new todo was posted');
+            console.log(res);
+        }).catch((err) => {
+            console.log('server contact failed');
+            console.log(err);
+        });
+    }
+}
+
+export const deleteTodo = (id) => ({
+    type: 'DELETE_TODO',
+    id
+});

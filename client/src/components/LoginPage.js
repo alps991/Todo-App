@@ -30,12 +30,42 @@ class LoginPage extends React.Component {
     render() {
         return (
             <div className="content-container">
-                <h2>Please login</h2>
-                <button className="button" onClick={() => this.setState({ status: 'register' })}>Register</button>
-                <button className="button" onClick={() => this.setState({ status: 'login' })}>Login</button>
+                {this.state.status == "login" ? (
+                    <div>
+                        <h2>Please login</h2>
+                        <p>Need to register an account?</p>
+                        <button
+                            className={this.state.status == "register" ? "button button--selected" : "button"}
+                            onClick={() => this.setState({ status: 'register' })}
+                        >Register
+                        </button>
+                    </div>
+                ) : (
+                        <div>
+                            <h2>Please enter a valid email and password greater than 6 characters below.</h2>
+                            <p>Already have an account?</p>
+                            <button
+                                className={this.state.status == "login" ? "button button--selected" : "button"}
+                                onClick={() => this.setState({ status: 'login' })}
+                            >Login
+                            </button>
+                        </div>
+                    )}
                 <form className="form">
-                    Email: <input type="text" value={this.state.email} onChange={this.handleEmailChange} />
-                    Password: <input type="password" value={this.state.password} onChange={this.handlePasswordChange} />
+                    <input
+                        className="text-input"
+                        placeholder="Email"
+                        type="text"
+                        value={this.state.email}
+                        onChange={this.handleEmailChange}
+                    />
+                    <input
+                        className="text-input"
+                        placeholder="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.handlePasswordChange}
+                    />
                     <button className="button" onClick={this.handleSubmit}>Submit</button>
                 </form>
                 <button onClick={() => this.setState({ email: 'example@example.com', password: 'Aaolaaol1' })}>Example</button>
