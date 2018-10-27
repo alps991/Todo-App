@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearTodos } from './todos';
 
 export const login = (token) => ({
   type: 'LOGIN',
@@ -59,6 +60,7 @@ export const startLogout = (token) => {
       }
     }).then((res) => {
       dispatch(logout());
+      dispatch(clearTodos());
       console.log('successfully logged out');
     }).catch((err) => {
       console.log('this the error');

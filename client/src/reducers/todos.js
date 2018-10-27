@@ -15,7 +15,9 @@ export default (state = {}, action) => {
                 return todo;
             });
         case 'DELETE_TODO':
-            return state.filter((todo) => todo._id != action.id)
+            return state.filter((todo) => todo._id != action.id);
+        case 'CLEAR_TODOS':
+            return {};
         default:
             return state;
     }

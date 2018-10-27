@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { startGetTodos } from '../actions/todos';
 import TodoList from './TodoList';
 import TodoSummary from './TodoSummary';
+import LoadingPage from './LoadingPage';
 
 class DashboardPage extends React.Component {
 
@@ -12,6 +13,10 @@ class DashboardPage extends React.Component {
   }
 
   render() {
+    console.log(this.props.todos);
+    if (!(this.props.todos instanceof Array)) {
+      return <LoadingPage />;
+    }
     if (!this.props.todos[0]) {
       return (
         <div className="content-container">

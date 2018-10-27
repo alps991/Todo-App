@@ -8,7 +8,7 @@ class EditTodo extends React.Component {
         super(props);
         this.state = {
             text: props.selectedTodo.text ? props.selectedTodo.text : '',
-            status: props.selectedTodo.status ? props.selectedTodo.status : "incomplete"
+            completed: props.selectedTodo.completed
         };
     }
 
@@ -17,12 +17,13 @@ class EditTodo extends React.Component {
     }
 
     handleStatusChange = (e) => {
-        this.setState({ status: e.target.value });
+        this.setState({ completed: e.target.value === 'complete' });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.startUpdateTodo(this.state.text, this.state.status, this.props.selectedTodo._id, this.props.token);
+        console.log(this.state.text, this.state.completed, this.props.selectedTodo._id, this.props.token)
+        this.props.startUpdateTodo(this.state.text, this.state.completed, this.props.selectedTodo._id, this.props.token);
         this.props.history.push('/');
     }
 
@@ -44,7 +45,7 @@ class EditTodo extends React.Component {
                                 value="incomplete"
                                 id="incomplete"
                                 name="status"
-                                defaultChecked={this.state.status == "incomplete" ? "checked" : undefined}
+                                defaultChecked={this.state.completed ? undefined : "checked"}
                             />
                             <label htmlFor="incomplete">Incomplete</label>
                         </div>
@@ -54,7 +55,7 @@ class EditTodo extends React.Component {
                                 value="complete"
                                 id="complete"
                                 name="status"
-                                defaultChecked={this.state.status == "complete" ? "checked" : undefined}
+                                defaultChecked={this.state.completed ? "checked" : undefined}
                             />
                             <label htmlFor="complete">Complete</label>
                         </div>
@@ -73,7 +74,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    startUpdateTodo: (text, token) => dispatch(startUpdateTodo(text, token)),
+    startUpdateTodo: (text, completed, id, token) => dispatch(startUpdateTodo(text, completed, id, token)),
     startDeleteTodo: (id, token) => dispatch(startDeleteTodo(id, token))
 });
 

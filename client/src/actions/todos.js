@@ -102,3 +102,7 @@ export const deleteTodo = (id) => ({
     type: 'DELETE_TODO',
     id
 });
+
+export const clearTodos = () => ({
+    type: 'CLEAR_TODOS'
+});
