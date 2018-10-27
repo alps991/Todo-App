@@ -22,7 +22,6 @@ class EditTodo extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.text, this.state.completed, this.props.selectedTodo._id, this.props.token)
         this.props.startUpdateTodo(this.state.text, this.state.completed, this.props.selectedTodo._id, this.props.token);
         this.props.history.push('/');
     }

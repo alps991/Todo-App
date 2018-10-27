@@ -13,7 +13,6 @@ class DashboardPage extends React.Component {
   }
 
   render() {
-    console.log(this.props.todos);
     if (!(this.props.todos instanceof Array)) {
       return <LoadingPage />;
     }

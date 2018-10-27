@@ -7,7 +7,8 @@ class LoginPage extends React.Component {
     state = {
         email: '',
         password: '',
-        status: 'login'
+        status: 'login',
+        errorMessage: ''
     }
 
     handleEmailChange = (e) => {
@@ -20,7 +21,10 @@ class LoginPage extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        if (this.state.status == "login") {
+        this.setState({ errorMessage: '' });
+        if (this.state.password.length < 6) {
+            this.setState({ errorMessage: 'Please enter a password that is at least 6 characters long' });
+        } else if (this.state.status == "login") {
             this.props.startLogin(this.state.email, this.state.password);
         } else if (this.state.status == "register") {
             this.props.startRegister(this.state.email, this.state.password);
@@ -69,6 +73,7 @@ class LoginPage extends React.Component {
                     <button className="button" onClick={this.handleSubmit}>Submit</button>
                 </form>
                 <button onClick={() => this.setState({ email: 'example@example.com', password: 'Aaolaaol1' })}>Example</button>
+                <div>{this.state.errorMessage}</div>
             </div>
         );
     }
